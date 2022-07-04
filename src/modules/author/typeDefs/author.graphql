@@ -1,0 +1,13 @@
+"""
+Some type description
+"""
+type Author @key(fields: "id") {
+  """
+  Some type description
+  """
+  id: ID!
+  """
+  Some type description
+  """
+  name: String
+}

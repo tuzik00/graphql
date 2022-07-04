@@ -1,0 +1,24 @@
+# https://www.apollographql.com/docs/federation/federation-spec/#federation-schema-specification
+# eslint-disable
+scalar _FieldSet
+scalar link__Import
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+directive @key(fields: _FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+directive @requires(fields: _FieldSet!) on FIELD_DEFINITION
+directive @provides(fields: _FieldSet!) on FIELD_DEFINITION
+directive @external(reason: String) on OBJECT | FIELD_DEFINITION
+directive @shareable on OBJECT | FIELD_DEFINITION
+directive @override(from: String!) on FIELD_DEFINITION
+
+enum link__Purpose {
+    """
+    `SECURITY` features provide metadata necessary to securely resolve fields.
+    """
+    SECURITY
+
+    """
+    `EXECUTION` features provide metadata necessary for operation execution.
+    """
+    EXECUTION
+}

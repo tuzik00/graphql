@@ -1,0 +1,15 @@
+schema:
+  - 'src/graphql/*.graphql'
+  - 'src/modules/**/typeDefs/*.graphql'
+generates:
+  ./src/types/graphql.gen.ts:
+    plugins:
+      - add:
+          content: /* eslint-disable */
+      - typescript:
+          nonOptionalTypename: true
+          scalars:
+            Id: 'string | number'
+      - typescript-resolvers:
+          federation: true
+          useTypeImports: true

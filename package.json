@@ -1,0 +1,58 @@
+{
+  "name": "graphql",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "run-s build:*",
+    "build:test": "yarn test",
+    "build:clean": "rimraf build",
+    "build:copy": "copyfiles -u 1 ./src/**/*.graphql dist",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/main.ts --watch",
+    "start": "cross-env NODE_ENV=production node ./dist/main.js",
+    "codegen": "graphql-codegen",
+    "test": "run-s test:*",
+    "test:lint": "eslint ./src",
+    "test:ts": "ttsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuzik00/graphql.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tuzik00/graphql/issues"
+  },
+  "homepage": "https://github.com/tuzik00/graphql#readme",
+  "dependencies": {
+    "@apollo/subgraph": "^2.0.5",
+    "@graphql-tools/load-files": "^6.6.0",
+    "@graphql-tools/schema": "^8.5.0",
+    "@graphql-yoga/node": "^2.9.2",
+    "graphql": "^16.5.0",
+    "graphql-yoga": "^2.9.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/add": "^3.1.1",
+    "@graphql-codegen/cli": "^2.6.3",
+    "@graphql-codegen/typescript": "^2.5.1",
+    "@graphql-codegen/typescript-resolvers": "^2.6.7",
+    "@graphql-eslint/eslint-plugin": "^3.10.4",
+    "@typescript-eslint/eslint-plugin": "^5.30.4",
+    "@typescript-eslint/parser": "^5.30.4",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.18",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "swc": "^1.0.11",
+    "ts-node": "^10.8.1",
+    "ttypescript": "^1.5.13",
+    "typescript": "^4.7.4"
+  }
+}

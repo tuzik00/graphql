@@ -1,0 +1,9 @@
+"""
+Some type description
+"""
+type Query {
+  """
+  Some type description
+  """
+  test: Test!
+}
