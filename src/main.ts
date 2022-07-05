@@ -3,8 +3,7 @@ import { config } from 'dotenv';
 
 import runServer from './server';
 
-import * as author from '@/modules/author';
-import * as test from '@/modules/test';
+import author from '@/modules/author';
 
 (async () => {
   console.log(`.env.${process.env.NODE_ENV}`);
@@ -12,5 +11,5 @@ import * as test from '@/modules/test';
     path: resolve(process.cwd(), `.env.${process.env.NODE_ENV}`),
   });
 
-  await runServer([author, test]);
+  await runServer([author]);
 })();

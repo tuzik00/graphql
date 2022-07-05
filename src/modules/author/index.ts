@@ -4,4 +4,4 @@ import resolvers from './resolver';
 
 const typeDefs = loadFilesSync(join(__dirname, './typeDefs/*.graphql'));
 
-export { typeDefs, resolvers };
+export default { typeDefs, resolvers };
