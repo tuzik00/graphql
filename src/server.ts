@@ -5,6 +5,7 @@ import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 export default async (modules) => {
   const server = createServer({
     port: parseInt(process.env.PORT),
+    hostname: process.env.HOST_NAME,
     schema: buildSubgraphSchema({
       typeDefs: mergeTypeDefs(modules.map((module) => module.typeDefs)),
       resolvers: mergeResolvers(
