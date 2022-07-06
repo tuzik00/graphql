@@ -1,12 +1,8 @@
-import express from 'express';
-import { createServer } from 'http';
+import { createServer } from '@graphql-yoga/node';
 import { WebSocketServer } from 'ws';
-import { ApolloServer } from 'apollo-server-express';
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
-import { makeExecutableSchema } from '@graphql-tools/schema';
 import { useServer } from 'graphql-ws/lib/use/ws';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
-import cors from 'cors';
 
 export default async (modules) => {
   const schema = makeExecutableSchema({
@@ -16,37 +12,49 @@ export default async (modules) => {
     ) as never,
   });
 
-  const app = express();
-  app.use(cors());
+  const yogaApp = createServer({
+    schema,
+    graphiql: {
+      subscriptionsProtocol: 'WS',
+    },
+  });
 
-  const httpServer = createServer(app);
+  const httpServer = await yogaApp.start();
+
   const wsServer = new WebSocketServer({
     server: httpServer,
-    path: '/graphql',
+    path: yogaApp.getAddressInfo().endpoint,
   });
 
-  const serverCleanup = useServer({ schema }, wsServer);
+  useServer(
+    {
+      execute: (args: any) => args.rootValue.execute(args),
+      subscribe: (args: any) => args.rootValue.subscribe(args),
+      onSubscribe: async (ctx, msg) => {
+        const { schema, execute, subscribe, contextFactory, parse, validate } =
+          yogaApp.getEnveloped(ctx);
 
-  const apolloServer = new ApolloServer({
-    schema,
-    csrfPrevention: true,
-    cache: 'bounded',
-    plugins: [
-      ApolloServerPluginDrainHttpServer({ httpServer }),
-      {
-        async serverWillStart() {
-          return {
-            async drainServer() {
-              await serverCleanup.dispose();
-            },
-          };
-        },
+        const args = {
+          schema,
+          operationName: msg.payload.operationName,
+          document: parse(msg.payload.query),
+          variableValues: msg.payload.variables,
+          contextValue: await contextFactory(),
+          rootValue: {
+            execute,
+            subscribe,
+          },
+        };
+
+        const errors = validate(args.schema, args.document);
+
+        if (errors.length) {
+          return errors;
+        }
+
+        return args;
       },
-    ],
-  });
-
-  await apolloServer.start();
-
-  apolloServer.applyMiddleware({ app });
-  httpServer.listen(process.env.PORT);
+    },
+    wsServer,
+  );
 };

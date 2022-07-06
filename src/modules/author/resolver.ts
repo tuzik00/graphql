@@ -1,6 +1,6 @@
-import { PubSub } from 'graphql-subscriptions';
+import { createPubSub } from '@graphql-yoga/node';
 
-const pubsub = new PubSub();
+const pubsub = createPubSub();
 let currentNumber = 0;
 
 function incrementNumber() {
@@ -19,7 +19,7 @@ export default {
   },
   Subscription: {
     numberIncremented: {
-      subscribe: () => pubsub.asyncIterator(['NUMBER_INCREMENTED']),
+      subscribe: () => pubsub.subscribe('NUMBER_INCREMENTED'),
     },
   },
 };
