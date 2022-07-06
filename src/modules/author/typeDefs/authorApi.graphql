@@ -1,9 +1,10 @@
-"""
-Some type description
-"""
 type Query {
+  currentNumber: Int
+}
+"test"
+type Subscription {
   """
-  Some type description
+    test
   """
-  hello: String
+  numberIncremented: Int
 }

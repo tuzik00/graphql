@@ -1,5 +1,4 @@
 schema:
-  - 'src/graphql/*.graphql'
   - 'src/modules/**/typeDefs/*.graphql'
 generates:
   ./src/types/graphql.gen.ts:
