@@ -1,8 +1,5 @@
-import authors from './data';
-import { QueryResolvers } from '@/types/graphql.gen';
-
 export default {
   Query: {
-    author: () => authors,
+    hello: () => 'world',
   },
-} as QueryResolvers;
+};

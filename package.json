@@ -2,6 +2,7 @@
   "name": "graphql",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "scripts": {
     "build": "run-s build:*",
     "build:clean": "rimraf build",
@@ -39,7 +40,6 @@
     "@graphql-eslint/eslint-plugin": "^3.10.4",
     "@typescript-eslint/eslint-plugin": "^5.30.4",
     "@typescript-eslint/parser": "^5.30.4",
-    "@zerollup/ts-transform-paths": "^1.7.18",
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",

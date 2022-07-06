@@ -1,3 +1,2 @@
 src/graphql/federation.graphql
-src/grpc/gen
 src/types/graphql.gen.d.ts

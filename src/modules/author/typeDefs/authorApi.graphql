@@ -5,5 +5,5 @@ type Query {
   """
   Some type description
   """
-  author: Author!
+  hello: String
 }

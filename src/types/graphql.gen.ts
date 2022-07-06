@@ -16,20 +16,19 @@ export type Scalars = {
   link__Import: any;
 };
 
-/** Some type description */
-export type Author = {
-  __typename: 'Author';
-  /** Some type description */
-  id: Scalars['ID'];
-  /** Some type description */
-  name?: Maybe<Scalars['String']>;
+export type Mutation = {
+  __typename: 'Mutation';
+  broadcastRandomNumber?: Maybe<Scalars['Boolean']>;
 };
 
-/** Some type description */
 export type Query = {
   __typename: 'Query';
-  /** Some type description */
-  author: Author;
+  hello?: Maybe<Scalars['String']>;
+};
+
+export type Subscription = {
+  __typename: 'Subscription';
+  randomNumber: Scalars['Float'];
 };
 
 export enum Link__Purpose {
@@ -43,17 +42,6 @@ export enum Link__Purpose {
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type ReferenceResolver<TResult, TReference, TContext> = (
-      reference: TReference,
-      context: TContext,
-      info: GraphQLResolveInfo
-    ) => Promise<TResult> | TResult;
-
-      type ScalarCheck<T, S> = S extends true ? T : NullableCheck<T, S>;
-      type NullableCheck<T, S> = Maybe<T> extends T ? Maybe<ListCheck<NonNullable<T>, S>> : ListCheck<T, S>;
-      type ListCheck<T, S> = T extends (infer U)[] ? NullableCheck<U, S>[] : GraphQLRecursivePick<T, S>;
-      export type GraphQLRecursivePick<T, S> = { [K in keyof T & keyof S]: ScalarCheck<T[K], S[K]> };
-    
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
@@ -119,22 +107,24 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Author: ResolverTypeWrapper<Author>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Subscription: ResolverTypeWrapper<{}>;
   link__Import: ResolverTypeWrapper<Scalars['link__Import']>;
   link__Purpose: Link__Purpose;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Author: Author;
   Boolean: Scalars['Boolean'];
-  ID: Scalars['ID'];
+  Float: Scalars['Float'];
+  Mutation: {};
   Query: {};
   String: Scalars['String'];
+  Subscription: {};
   link__Import: Scalars['link__Import'];
 };
 
@@ -157,15 +147,16 @@ export type ShareableDirectiveArgs = { };
 
 export type ShareableDirectiveResolver<Result, Parent, ContextType = any, Args = ShareableDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
-  __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Author']>, { __typename: 'Author' } & GraphQLRecursivePick<ParentType, {"id":true}>, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  broadcastRandomNumber?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  author?: Resolver<ResolversTypes['Author'], ParentType, ContextType>;
+  hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  randomNumber?: SubscriptionResolver<ResolversTypes['Float'], "randomNumber", ParentType, ContextType>;
 };
 
 export interface Link__ImportScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['link__Import'], any> {
@@ -173,8 +164,9 @@ export interface Link__ImportScalarConfig extends GraphQLScalarTypeConfig<Resolv
 }
 
 export type Resolvers<ContextType = any> = {
-  Author?: AuthorResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   link__Import?: GraphQLScalarType;
 };
 
