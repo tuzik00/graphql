@@ -1,6 +1,12 @@
 schema:
   - 'src/modules/**/typeDefs/*.graphql'
+  - '!src/modules/root/typeDefs/mongodb.graphql'
 generates:
+  ./src/types/mongodb.gen.ts:
+    plugins:
+      - typescript
+      - typescript-mongodb
+
   ./src/types/graphql.gen.ts:
     plugins:
       - add:
@@ -9,6 +15,7 @@ generates:
           nonOptionalTypename: true
           scalars:
             Id: 'string | number'
+            Email: 'string'
       - typescript-resolvers:
           federation: true
           useTypeImports: true

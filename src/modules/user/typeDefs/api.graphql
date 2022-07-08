@@ -1,0 +1,53 @@
+"""
+Запросы
+"""
+type Query {
+  """Пользователь"""
+  user: User
+}
+
+"""
+Мутации
+"""
+type Mutation {
+  user: UserMutation
+}
+
+"""
+CRUD пользователя
+"""
+type UserMutation {
+  create(user: UserInput!): CreateUserPayload
+  update(user: UserInput!): UpdateUserPayload
+  delete(id: String): DeleteUserPayload
+}
+
+"""
+Параметры запроса на создание пользователя
+"""
+input UserInput {
+  firstname: String
+  lastname: String
+  email: Email!
+}
+
+"""
+Результат запроса создания пользователя
+"""
+type CreateUserPayload {
+  payload: User!
+}
+
+"""
+Результат запроса обновления пользователя
+"""
+type UpdateUserPayload {
+  payload: User!
+}
+
+"""
+Результат запроса обновления пользователя
+"""
+type DeleteUserPayload {
+  payload: Boolean!
+}

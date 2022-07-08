@@ -1,14 +1,19 @@
 import { resolve } from 'path';
 import { config } from 'dotenv';
 
-import runServer from './server';
+import author from '@/modules/user';
+import root from '@/modules/root';
+import user from '@/modules/user';
 
-import author from '@/modules/author';
+import runServer from './server';
+import mongodb from './mongodb';
 
 (async () => {
   config({
     path: resolve(process.cwd(), `.env.${process.env.NODE_ENV}`),
   });
 
-  await runServer([author]);
+  await runServer([root, author, user], {
+    database: await mongodb(),
+  });
 })();

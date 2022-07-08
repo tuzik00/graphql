@@ -4,7 +4,9 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 
-export default async (modules) => {
+import { GraphQLContext } from './types/context';
+
+export default async (modules, { database }) => {
   const schema = makeExecutableSchema({
     typeDefs: mergeTypeDefs(modules.map((module) => module.typeDefs)),
     resolvers: mergeResolvers(
@@ -12,10 +14,18 @@ export default async (modules) => {
     ) as never,
   });
 
-  const yogaApp = createServer({
+  const yogaApp = createServer<Record<string, any>, GraphQLContext>({
     schema,
     graphiql: {
       subscriptionsProtocol: 'WS',
+    },
+    context: async ({ request }) => {
+      const userId = request.headers.get('userId') ?? null;
+
+      return {
+        userId,
+        database,
+      };
     },
   });
 

@@ -5,6 +5,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,31 +13,82 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  _FieldSet: any;
-  link__Import: any;
+  /** Тип почта */
+  Email: string;
 };
 
+/** Результат запроса создания пользователя */
+export type CreateUserPayload = {
+  __typename: 'CreateUserPayload';
+  payload: User;
+};
+
+/** Результат запроса обновления пользователя */
+export type DeleteUserPayload = {
+  __typename: 'DeleteUserPayload';
+  payload: Scalars['Boolean'];
+};
+
+/** Мутации */
 export type Mutation = {
   __typename: 'Mutation';
-  broadcastRandomNumber?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<UserMutation>;
 };
 
+/** Запросы */
 export type Query = {
   __typename: 'Query';
-  hello?: Maybe<Scalars['String']>;
+  /** Пользователь */
+  user?: Maybe<User>;
 };
 
-export type Subscription = {
-  __typename: 'Subscription';
-  randomNumber: Scalars['Float'];
+/** Результат запроса обновления пользователя */
+export type UpdateUserPayload = {
+  __typename: 'UpdateUserPayload';
+  payload: User;
 };
 
-export enum Link__Purpose {
-  /** `EXECUTION` features provide metadata necessary for operation execution. */
-  Execution = 'EXECUTION',
-  /** `SECURITY` features provide metadata necessary to securely resolve fields. */
-  Security = 'SECURITY'
-}
+/** Пользователь */
+export type User = {
+  __typename: 'User';
+  email?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  lastname?: Maybe<Scalars['String']>;
+};
+
+/** Параметры запроса на создание пользователя */
+export type UserInput = {
+  email: Scalars['Email'];
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+};
+
+/** CRUD пользователя */
+export type UserMutation = {
+  __typename: 'UserMutation';
+  create?: Maybe<CreateUserPayload>;
+  delete?: Maybe<DeleteUserPayload>;
+  update?: Maybe<UpdateUserPayload>;
+};
+
+
+/** CRUD пользователя */
+export type UserMutationCreateArgs = {
+  user: UserInput;
+};
+
+
+/** CRUD пользователя */
+export type UserMutationDeleteArgs = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+
+/** CRUD пользователя */
+export type UserMutationUpdateArgs = {
+  user: UserInput;
+};
 
 
 
@@ -108,70 +160,85 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Float: ResolverTypeWrapper<Scalars['Float']>;
+  CreateUserPayload: ResolverTypeWrapper<CreateUserPayload>;
+  DeleteUserPayload: ResolverTypeWrapper<DeleteUserPayload>;
+  Email: ResolverTypeWrapper<Scalars['Email']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  Subscription: ResolverTypeWrapper<{}>;
-  link__Import: ResolverTypeWrapper<Scalars['link__Import']>;
-  link__Purpose: Link__Purpose;
+  UpdateUserPayload: ResolverTypeWrapper<UpdateUserPayload>;
+  User: ResolverTypeWrapper<User>;
+  UserInput: UserInput;
+  UserMutation: ResolverTypeWrapper<UserMutation>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
-  Float: Scalars['Float'];
+  CreateUserPayload: CreateUserPayload;
+  DeleteUserPayload: DeleteUserPayload;
+  Email: Scalars['Email'];
+  ID: Scalars['ID'];
   Mutation: {};
   Query: {};
   String: Scalars['String'];
-  Subscription: {};
-  link__Import: Scalars['link__Import'];
+  UpdateUserPayload: UpdateUserPayload;
+  User: User;
+  UserInput: UserInput;
+  UserMutation: UserMutation;
 };
 
-export type LinkDirectiveArgs = {
-  as?: Maybe<Scalars['String']>;
-  for?: Maybe<Link__Purpose>;
-  import?: Maybe<Array<Maybe<Scalars['link__Import']>>>;
-  url?: Maybe<Scalars['String']>;
+export type CreateUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateUserPayload'] = ResolversParentTypes['CreateUserPayload']> = {
+  payload?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LinkDirectiveResolver<Result, Parent, ContextType = any, Args = LinkDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type OverrideDirectiveArgs = {
-  from: Scalars['String'];
+export type DeleteUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteUserPayload'] = ResolversParentTypes['DeleteUserPayload']> = {
+  payload?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type OverrideDirectiveResolver<Result, Parent, ContextType = any, Args = OverrideDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type ShareableDirectiveArgs = { };
-
-export type ShareableDirectiveResolver<Result, Parent, ContextType = any, Args = ShareableDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export interface EmailScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Email'], any> {
+  name: 'Email';
+}
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  broadcastRandomNumber?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['UserMutation']>, ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
-export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  randomNumber?: SubscriptionResolver<ResolversTypes['Float'], "randomNumber", ParentType, ContextType>;
+export type UpdateUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateUserPayload'] = ResolversParentTypes['UpdateUserPayload']> = {
+  payload?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface Link__ImportScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['link__Import'], any> {
-  name: 'link__Import';
-}
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  lastname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserMutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserMutation'] = ResolversParentTypes['UserMutation']> = {
+  create?: Resolver<Maybe<ResolversTypes['CreateUserPayload']>, ParentType, ContextType, RequireFields<UserMutationCreateArgs, 'user'>>;
+  delete?: Resolver<Maybe<ResolversTypes['DeleteUserPayload']>, ParentType, ContextType, Partial<UserMutationDeleteArgs>>;
+  update?: Resolver<Maybe<ResolversTypes['UpdateUserPayload']>, ParentType, ContextType, RequireFields<UserMutationUpdateArgs, 'user'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type Resolvers<ContextType = any> = {
+  CreateUserPayload?: CreateUserPayloadResolvers<ContextType>;
+  DeleteUserPayload?: DeleteUserPayloadResolvers<ContextType>;
+  Email?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  Subscription?: SubscriptionResolvers<ContextType>;
-  link__Import?: GraphQLScalarType;
+  UpdateUserPayload?: UpdateUserPayloadResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
+  UserMutation?: UserMutationResolvers<ContextType>;
 };
 
-export type DirectiveResolvers<ContextType = any> = {
-  link?: LinkDirectiveResolver<any, any, ContextType>;
-  override?: OverrideDirectiveResolver<any, any, ContextType>;
-  shareable?: ShareableDirectiveResolver<any, any, ContextType>;
-};

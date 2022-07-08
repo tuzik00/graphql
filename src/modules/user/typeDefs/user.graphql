@@ -1,0 +1,9 @@
+"""
+Пользователь
+"""
+type User @entity {
+  id: ID! @id
+  firstName: String @column
+  lastname: String @column
+  email: String @column
+}
