@@ -1,0 +1,67 @@
+"""
+Запросы
+"""
+type Query {
+  route(filter: RouteFilter!): Route
+}
+
+"""
+Фильтр роутов
+"""
+input RouteFilter {
+  id: String!
+}
+
+"""
+Мутации
+"""
+type Mutation {
+  route: RouteMutation
+}
+
+"""
+Мутации роута
+"""
+type RouteMutation {
+  create(input: RouteInput!): CreateRoutePayload
+}
+
+"""
+Результат запроса создания пользователя
+"""
+type CreateRoutePayload {
+  payload: Route!
+}
+
+"""
+Ввод данных о роуте
+"""
+input RouteInput {
+  startPosition: CoordsInput!
+  endPosition: CoordsInput!
+  points: [PointInput]!
+}
+
+"""
+Ввод данных о роуте
+"""
+input PointInput {
+  type: RoutePointType!
+  coords: CoordsInput!
+  user: PointUserInput
+}
+
+"""
+Пользователь
+"""
+input PointUserInput {
+  id: ID!
+}
+
+"""
+Ввод данных о позиции роута
+"""
+input CoordsInput {
+  latitude: Float!
+  longitude: Float!
+}

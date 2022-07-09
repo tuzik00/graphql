@@ -6,6 +6,8 @@ generates:
     plugins:
       - typescript
       - typescript-mongodb
+    config:
+      enumsAsString: false
 
   ./src/types/graphql.gen.ts:
     plugins:

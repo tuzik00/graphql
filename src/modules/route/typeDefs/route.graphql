@@ -1,0 +1,40 @@
+"""
+Тип точки
+"""
+enum RoutePointType {
+  USER
+}
+
+"""
+Маршрут
+"""
+type Route @entity {
+  id: ID! @id
+  startPosition: RouteCoords! @column
+  endPosition: RouteCoords! @column
+  points: [RoutePoint]! @column
+}
+
+"""
+Точки на карте
+"""
+type RoutePoint @entity {
+  type: RoutePointType! @column
+  coords: RouteCoords! @column
+  user: RoutePointUser @column
+}
+
+"""
+Пользователь
+"""
+type RoutePointUser @entity {
+  id: ID! @column
+}
+
+"""
+Координаты
+"""
+type RouteCoords @entity {
+  latitude: Float! @column
+  longitude: Float! @column
+}

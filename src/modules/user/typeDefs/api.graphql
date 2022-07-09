@@ -17,8 +17,8 @@ type Mutation {
 CRUD пользователя
 """
 type UserMutation {
-  create(user: UserInput!): CreateUserPayload
-  update(user: UserInput!): UpdateUserPayload
+  create(input: UserInput!): CreateUserPayload
+  update(input: UserInput!): UpdateUserPayload
   delete(id: String): DeleteUserPayload
 }
 

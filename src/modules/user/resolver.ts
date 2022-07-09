@@ -29,21 +29,22 @@ const resolver: Resolvers = {
     }),
   },
   UserMutation: {
-    create: async (_, { user }, ctx) => {
+    create: async (_, { input }, ctx) => {
       try {
-        const newUser = new UserModel(user);
+        const newUser = new UserModel(input);
         const userCollection = ctx.database.collection('users');
 
-        await userCollection.insertOne(newUser);
+        const { insertedId } = await userCollection.insertOne(newUser);
+        const user = await userCollection.findOne({ _id: insertedId });
 
         return {
           __typename: 'CreateUserPayload',
           payload: {
             __typename: 'User',
-            id: newUser._id.toHexString(),
-            firstName: newUser.firstName,
-            lastname: newUser.lastname,
-            email: newUser.email,
+            id: user._id.toHexString(),
+            firstName: user.firstName,
+            lastname: user.lastname,
+            email: user.email,
           },
         };
       } catch (e) {

@@ -19,6 +19,18 @@ export type AdditionalEntityFields = {
   type?: InputMaybe<Scalars['String']>;
 };
 
+/** Ввод данных о позиции роута */
+export type CoordsInput = {
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+};
+
+/** Результат запроса создания пользователя */
+export type CreateRoutePayload = {
+  __typename?: 'CreateRoutePayload';
+  payload: Route;
+};
+
 /** Результат запроса создания пользователя */
 export type CreateUserPayload = {
   __typename?: 'CreateUserPayload';
@@ -34,14 +46,93 @@ export type DeleteUserPayload = {
 /** Мутации */
 export type Mutation = {
   __typename?: 'Mutation';
+  route?: Maybe<RouteMutation>;
   user?: Maybe<UserMutation>;
+};
+
+/** Ввод данных о роуте */
+export type PointInput = {
+  coords: CoordsInput;
+  type: RoutePointType;
+  user?: InputMaybe<PointUserInput>;
+};
+
+/** Пользователь */
+export type PointUserInput = {
+  id: Scalars['ID'];
 };
 
 /** Запросы */
 export type Query = {
   __typename?: 'Query';
+  route?: Maybe<Route>;
   /** Пользователь */
   user?: Maybe<User>;
+};
+
+
+/** Запросы */
+export type QueryRouteArgs = {
+  filter: RouteFilter;
+};
+
+/** Маршрут */
+export type Route = {
+  __typename?: 'Route';
+  endPosition: RouteCoords;
+  id: Scalars['ID'];
+  points: Array<Maybe<RoutePoint>>;
+  startPosition: RouteCoords;
+};
+
+/** Координаты */
+export type RouteCoords = {
+  __typename?: 'RouteCoords';
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+};
+
+/** Фильтр роутов */
+export type RouteFilter = {
+  id: Scalars['String'];
+};
+
+/** Ввод данных о роуте */
+export type RouteInput = {
+  endPosition: CoordsInput;
+  points: Array<InputMaybe<PointInput>>;
+  startPosition: CoordsInput;
+};
+
+/** Мутации роута */
+export type RouteMutation = {
+  __typename?: 'RouteMutation';
+  create?: Maybe<CreateRoutePayload>;
+};
+
+
+/** Мутации роута */
+export type RouteMutationCreateArgs = {
+  input: RouteInput;
+};
+
+/** Точки на карте */
+export type RoutePoint = {
+  __typename?: 'RoutePoint';
+  coords: RouteCoords;
+  type: RoutePointType;
+  user?: Maybe<RoutePointUser>;
+};
+
+/** Тип точки */
+export enum RoutePointType {
+  User = 'USER'
+}
+
+/** Пользователь */
+export type RoutePointUser = {
+  __typename?: 'RoutePointUser';
+  id: Scalars['ID'];
 };
 
 /** Результат запроса обновления пользователя */
@@ -77,7 +168,7 @@ export type UserMutation = {
 
 /** CRUD пользователя */
 export type UserMutationCreateArgs = {
-  user: UserInput;
+  input: UserInput;
 };
 
 
@@ -89,10 +180,32 @@ export type UserMutationDeleteArgs = {
 
 /** CRUD пользователя */
 export type UserMutationUpdateArgs = {
-  user: UserInput;
+  input: UserInput;
 };
 
 import { ObjectId } from 'mongodb';
+export type RouteDbObject = {
+  endPosition: RouteCoords,
+  _id: ObjectId,
+  points: Array<Maybe<RoutePoint>>,
+  startPosition: RouteCoords,
+};
+
+export type RouteCoordsDbObject = {
+  latitude: number,
+  longitude: number,
+};
+
+export type RoutePointDbObject = {
+  coords: RouteCoords,
+  type: RoutePointType,
+  user?: Maybe<RoutePointUser>,
+};
+
+export type RoutePointUserDbObject = {
+  id: string,
+};
+
 export type UserDbObject = {
   email?: Maybe<string>,
   firstName?: Maybe<string>,

@@ -17,6 +17,18 @@ export type Scalars = {
   Email: string;
 };
 
+/** Ввод данных о позиции роута */
+export type CoordsInput = {
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+};
+
+/** Результат запроса создания пользователя */
+export type CreateRoutePayload = {
+  __typename: 'CreateRoutePayload';
+  payload: Route;
+};
+
 /** Результат запроса создания пользователя */
 export type CreateUserPayload = {
   __typename: 'CreateUserPayload';
@@ -32,14 +44,93 @@ export type DeleteUserPayload = {
 /** Мутации */
 export type Mutation = {
   __typename: 'Mutation';
+  route?: Maybe<RouteMutation>;
   user?: Maybe<UserMutation>;
+};
+
+/** Ввод данных о роуте */
+export type PointInput = {
+  coords: CoordsInput;
+  type: RoutePointType;
+  user?: InputMaybe<PointUserInput>;
+};
+
+/** Пользователь */
+export type PointUserInput = {
+  id: Scalars['ID'];
 };
 
 /** Запросы */
 export type Query = {
   __typename: 'Query';
+  route?: Maybe<Route>;
   /** Пользователь */
   user?: Maybe<User>;
+};
+
+
+/** Запросы */
+export type QueryRouteArgs = {
+  filter: RouteFilter;
+};
+
+/** Маршрут */
+export type Route = {
+  __typename: 'Route';
+  endPosition: RouteCoords;
+  id: Scalars['ID'];
+  points: Array<Maybe<RoutePoint>>;
+  startPosition: RouteCoords;
+};
+
+/** Координаты */
+export type RouteCoords = {
+  __typename: 'RouteCoords';
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+};
+
+/** Фильтр роутов */
+export type RouteFilter = {
+  id: Scalars['String'];
+};
+
+/** Ввод данных о роуте */
+export type RouteInput = {
+  endPosition: CoordsInput;
+  points: Array<InputMaybe<PointInput>>;
+  startPosition: CoordsInput;
+};
+
+/** Мутации роута */
+export type RouteMutation = {
+  __typename: 'RouteMutation';
+  create?: Maybe<CreateRoutePayload>;
+};
+
+
+/** Мутации роута */
+export type RouteMutationCreateArgs = {
+  input: RouteInput;
+};
+
+/** Точки на карте */
+export type RoutePoint = {
+  __typename: 'RoutePoint';
+  coords: RouteCoords;
+  type: RoutePointType;
+  user?: Maybe<RoutePointUser>;
+};
+
+/** Тип точки */
+export enum RoutePointType {
+  User = 'USER'
+}
+
+/** Пользователь */
+export type RoutePointUser = {
+  __typename: 'RoutePointUser';
+  id: Scalars['ID'];
 };
 
 /** Результат запроса обновления пользователя */
@@ -75,7 +166,7 @@ export type UserMutation = {
 
 /** CRUD пользователя */
 export type UserMutationCreateArgs = {
-  user: UserInput;
+  input: UserInput;
 };
 
 
@@ -87,7 +178,7 @@ export type UserMutationDeleteArgs = {
 
 /** CRUD пользователя */
 export type UserMutationUpdateArgs = {
-  user: UserInput;
+  input: UserInput;
 };
 
 
@@ -160,12 +251,25 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CoordsInput: CoordsInput;
+  CreateRoutePayload: ResolverTypeWrapper<CreateRoutePayload>;
   CreateUserPayload: ResolverTypeWrapper<CreateUserPayload>;
   DeleteUserPayload: ResolverTypeWrapper<DeleteUserPayload>;
   Email: ResolverTypeWrapper<Scalars['Email']>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
+  PointInput: PointInput;
+  PointUserInput: PointUserInput;
   Query: ResolverTypeWrapper<{}>;
+  Route: ResolverTypeWrapper<Route>;
+  RouteCoords: ResolverTypeWrapper<RouteCoords>;
+  RouteFilter: RouteFilter;
+  RouteInput: RouteInput;
+  RouteMutation: ResolverTypeWrapper<RouteMutation>;
+  RoutePoint: ResolverTypeWrapper<RoutePoint>;
+  RoutePointType: RoutePointType;
+  RoutePointUser: ResolverTypeWrapper<RoutePointUser>;
   String: ResolverTypeWrapper<Scalars['String']>;
   UpdateUserPayload: ResolverTypeWrapper<UpdateUserPayload>;
   User: ResolverTypeWrapper<User>;
@@ -176,17 +280,34 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  CoordsInput: CoordsInput;
+  CreateRoutePayload: CreateRoutePayload;
   CreateUserPayload: CreateUserPayload;
   DeleteUserPayload: DeleteUserPayload;
   Email: Scalars['Email'];
+  Float: Scalars['Float'];
   ID: Scalars['ID'];
   Mutation: {};
+  PointInput: PointInput;
+  PointUserInput: PointUserInput;
   Query: {};
+  Route: Route;
+  RouteCoords: RouteCoords;
+  RouteFilter: RouteFilter;
+  RouteInput: RouteInput;
+  RouteMutation: RouteMutation;
+  RoutePoint: RoutePoint;
+  RoutePointUser: RoutePointUser;
   String: Scalars['String'];
   UpdateUserPayload: UpdateUserPayload;
   User: User;
   UserInput: UserInput;
   UserMutation: UserMutation;
+};
+
+export type CreateRoutePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateRoutePayload'] = ResolversParentTypes['CreateRoutePayload']> = {
+  payload?: Resolver<ResolversTypes['Route'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type CreateUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateUserPayload'] = ResolversParentTypes['CreateUserPayload']> = {
@@ -204,11 +325,44 @@ export interface EmailScalarConfig extends GraphQLScalarTypeConfig<ResolversType
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  route?: Resolver<Maybe<ResolversTypes['RouteMutation']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['UserMutation']>, ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  route?: Resolver<Maybe<ResolversTypes['Route']>, ParentType, ContextType, RequireFields<QueryRouteArgs, 'filter'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+};
+
+export type RouteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Route'] = ResolversParentTypes['Route']> = {
+  endPosition?: Resolver<ResolversTypes['RouteCoords'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  points?: Resolver<Array<Maybe<ResolversTypes['RoutePoint']>>, ParentType, ContextType>;
+  startPosition?: Resolver<ResolversTypes['RouteCoords'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RouteCoordsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RouteCoords'] = ResolversParentTypes['RouteCoords']> = {
+  latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RouteMutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['RouteMutation'] = ResolversParentTypes['RouteMutation']> = {
+  create?: Resolver<Maybe<ResolversTypes['CreateRoutePayload']>, ParentType, ContextType, RequireFields<RouteMutationCreateArgs, 'input'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RoutePointResolvers<ContextType = any, ParentType extends ResolversParentTypes['RoutePoint'] = ResolversParentTypes['RoutePoint']> = {
+  coords?: Resolver<ResolversTypes['RouteCoords'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['RoutePointType'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['RoutePointUser']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RoutePointUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['RoutePointUser'] = ResolversParentTypes['RoutePointUser']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UpdateUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateUserPayload'] = ResolversParentTypes['UpdateUserPayload']> = {
@@ -225,18 +379,24 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type UserMutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserMutation'] = ResolversParentTypes['UserMutation']> = {
-  create?: Resolver<Maybe<ResolversTypes['CreateUserPayload']>, ParentType, ContextType, RequireFields<UserMutationCreateArgs, 'user'>>;
+  create?: Resolver<Maybe<ResolversTypes['CreateUserPayload']>, ParentType, ContextType, RequireFields<UserMutationCreateArgs, 'input'>>;
   delete?: Resolver<Maybe<ResolversTypes['DeleteUserPayload']>, ParentType, ContextType, Partial<UserMutationDeleteArgs>>;
-  update?: Resolver<Maybe<ResolversTypes['UpdateUserPayload']>, ParentType, ContextType, RequireFields<UserMutationUpdateArgs, 'user'>>;
+  update?: Resolver<Maybe<ResolversTypes['UpdateUserPayload']>, ParentType, ContextType, RequireFields<UserMutationUpdateArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  CreateRoutePayload?: CreateRoutePayloadResolvers<ContextType>;
   CreateUserPayload?: CreateUserPayloadResolvers<ContextType>;
   DeleteUserPayload?: DeleteUserPayloadResolvers<ContextType>;
   Email?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Route?: RouteResolvers<ContextType>;
+  RouteCoords?: RouteCoordsResolvers<ContextType>;
+  RouteMutation?: RouteMutationResolvers<ContextType>;
+  RoutePoint?: RoutePointResolvers<ContextType>;
+  RoutePointUser?: RoutePointUserResolvers<ContextType>;
   UpdateUserPayload?: UpdateUserPayloadResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserMutation?: UserMutationResolvers<ContextType>;
