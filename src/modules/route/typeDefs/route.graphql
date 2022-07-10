@@ -10,6 +10,9 @@ enum RoutePointType {
 Маршрут
 """
 type Route @entity {
+  """
+  Id
+  """
   _id: ID! @id
   startPosition: RouteCoords! @column
   endPosition: RouteCoords! @column
@@ -28,8 +31,13 @@ type RoutePoint @entity {
 """
 Пользователь
 """
-type RoutePointUser @entity {
+type RoutePointUser implements User @entity {
+  """
+  Id
+  """
   _id: ID! @column
+  firstName: String
+  lastName: String
 }
 
 """

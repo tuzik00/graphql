@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { ApolloError } from 'apollo-server-core';
 import { Resolvers } from '@/types/graphql.gen';
-import { UserModel } from './model';
+import { UserModel } from './models';
 
 const resolver: Resolvers = {
   Query: {

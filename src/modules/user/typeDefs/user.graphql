@@ -2,6 +2,9 @@
 Пользователь
 """
 type User @entity {
+  """
+  Id
+  """
   _id: ID! @id
   firstName: String @column
   lastName: String @column

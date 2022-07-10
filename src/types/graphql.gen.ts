@@ -71,6 +71,7 @@ export type QueryRouteArgs = {
 /** Маршрут */
 export type Route = {
   __typename: 'Route';
+  /** Id */
   _id: Scalars['ID'];
   endPosition: RouteCoords;
   points: Array<Maybe<RoutePoint>>;
@@ -86,7 +87,8 @@ export type RouteCoords = {
 
 /** Фильтр роутов */
 export type RouteFilter = {
-  id: Scalars['String'];
+  /** Id */
+  _id: Scalars['String'];
 };
 
 /** Ввод данных о роуте */
@@ -123,9 +125,12 @@ export enum RoutePointType {
 }
 
 /** Пользователь */
-export type RoutePointUser = {
+export type RoutePointUser = User & {
   __typename: 'RoutePointUser';
+  /** Id */
   _id: Scalars['ID'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
 };
 
 /** Результат запроса обновления пользователя */
@@ -137,6 +142,7 @@ export type UpdateUserPayload = {
 /** Пользователь */
 export type User = {
   __typename: 'User';
+  /** Id */
   _id: Scalars['ID'];
   email?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
@@ -355,6 +361,8 @@ export type RoutePointResolvers<ContextType = any, ParentType extends ResolversP
 
 export type RoutePointUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['RoutePointUser'] = ResolversParentTypes['RoutePointUser']> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

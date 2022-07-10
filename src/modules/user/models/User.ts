@@ -1,9 +1,9 @@
+import { ObjectId } from 'mongodb';
+
 import { UserDbObject } from '@/types/mongodb.gen';
 import { User } from '@/types/graphql.gen';
 
-import { ObjectId } from 'mongodb';
-
-export class UserModel implements UserDbObject {
+class UserModel implements UserDbObject {
   _id;
   firstName;
   lastName;
@@ -25,3 +25,5 @@ export class UserModel implements UserDbObject {
     this.email = params.email || '';
   }
 }
+
+export default UserModel;

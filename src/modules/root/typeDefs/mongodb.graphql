@@ -1,11 +1,47 @@
-directive @abstractEntity(discriminatorField: String!, additionalFields: [AdditionalEntityFields]) on INTERFACE
-directive @entity(embedded: Boolean, additionalFields: [AdditionalEntityFields]) on OBJECT
+"""
+Директива
+"""
+directive @abstractEntity(
+  discriminatorField: String!
+  additionalFields: [AdditionalEntityFields]
+) on INTERFACE
+
+"""
+Директива
+"""
+directive @entity(
+  embedded: Boolean
+  additionalFields: [AdditionalEntityFields]
+) on OBJECT
+
+"""
+Директива
+"""
 directive @column(overrideType: String) on FIELD_DEFINITION
+
+"""
+Директива
+"""
 directive @id on FIELD_DEFINITION
+
+"""
+Директива
+"""
 directive @link(overrideType: String) on FIELD_DEFINITION
+
+"""
+Директива
+"""
 directive @embedded on FIELD_DEFINITION
+
+"""
+Директива
+"""
 directive @map(path: String!) on FIELD_DEFINITION
 
+"""
+Директива
+"""
 input AdditionalEntityFields {
   path: String
   type: String

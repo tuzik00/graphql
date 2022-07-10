@@ -1,15 +1,28 @@
+import { ObjectId } from 'mongodb';
+
 import { Resolvers } from '@/types/graphql.gen';
+import { RoutePointType } from '@/types/mongodb.gen';
 
 import {
   RouteModel,
   RouteCoordsModel,
   RoutePointModel,
   RoutePointUserModel,
-} from '@/modules/route/model';
-
-import { RoutePointType } from '@/types/mongodb.gen';
+} from './models';
 
 const resolver: Resolvers = {
+  Query: {
+    route: async (_, { filter: { _id } }, ctx) => {
+      const routeCollection = ctx.database.collection('routes');
+      const route = await routeCollection.findOne({ _id: new ObjectId(_id) });
+
+      if (!route) {
+        return null;
+      }
+
+      return RouteModel.serialize(route);
+    },
+  },
   Mutation: {
     route: () => ({
       __typename: 'RouteMutation',

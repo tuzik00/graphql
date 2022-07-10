@@ -9,7 +9,10 @@ type Query {
 Фильтр роутов
 """
 input RouteFilter {
-  id: String!
+  """
+  Id
+  """
+  _id: String!
 }
 
 """
@@ -49,7 +52,6 @@ input PointInput {
   type: RoutePointType!
   coords: CoordsInput!
 }
-
 
 """
 Ввод данных о позиции роута

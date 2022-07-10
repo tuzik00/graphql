@@ -31,7 +31,8 @@ module.exports = {
         "spaced-comment": "off",
         "@graphql-eslint/no-unreachable-types": "off",
         "@graphql-eslint/strict-id-in-types": "off",
-        "@graphql-eslint/known-argument-names": "off"
+        "@graphql-eslint/known-argument-names": "off",
+        "@graphql-eslint/naming-convention": "off",
       }
     },
   ]
