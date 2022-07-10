@@ -52,12 +52,6 @@ export type Mutation = {
 export type PointInput = {
   coords: CoordsInput;
   type: RoutePointType;
-  user?: InputMaybe<PointUserInput>;
-};
-
-/** Пользователь */
-export type PointUserInput = {
-  id: Scalars['ID'];
 };
 
 /** Запросы */
@@ -77,8 +71,8 @@ export type QueryRouteArgs = {
 /** Маршрут */
 export type Route = {
   __typename: 'Route';
+  _id: Scalars['ID'];
   endPosition: RouteCoords;
-  id: Scalars['ID'];
   points: Array<Maybe<RoutePoint>>;
   startPosition: RouteCoords;
 };
@@ -124,13 +118,14 @@ export type RoutePoint = {
 
 /** Тип точки */
 export enum RoutePointType {
+  Unknown = 'UNKNOWN',
   User = 'USER'
 }
 
 /** Пользователь */
 export type RoutePointUser = {
   __typename: 'RoutePointUser';
-  id: Scalars['ID'];
+  _id: Scalars['ID'];
 };
 
 /** Результат запроса обновления пользователя */
@@ -142,17 +137,17 @@ export type UpdateUserPayload = {
 /** Пользователь */
 export type User = {
   __typename: 'User';
+  _id: Scalars['ID'];
   email?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  lastname?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
 };
 
 /** Параметры запроса на создание пользователя */
 export type UserInput = {
   email: Scalars['Email'];
-  firstname?: InputMaybe<Scalars['String']>;
-  lastname?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
 };
 
 /** CRUD пользователя */
@@ -260,7 +255,6 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   PointInput: PointInput;
-  PointUserInput: PointUserInput;
   Query: ResolverTypeWrapper<{}>;
   Route: ResolverTypeWrapper<Route>;
   RouteCoords: ResolverTypeWrapper<RouteCoords>;
@@ -289,7 +283,6 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Mutation: {};
   PointInput: PointInput;
-  PointUserInput: PointUserInput;
   Query: {};
   Route: Route;
   RouteCoords: RouteCoords;
@@ -335,8 +328,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type RouteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Route'] = ResolversParentTypes['Route']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   endPosition?: Resolver<ResolversTypes['RouteCoords'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   points?: Resolver<Array<Maybe<ResolversTypes['RoutePoint']>>, ParentType, ContextType>;
   startPosition?: Resolver<ResolversTypes['RouteCoords'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -361,7 +354,7 @@ export type RoutePointResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type RoutePointUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['RoutePointUser'] = ResolversParentTypes['RoutePointUser']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -371,10 +364,10 @@ export type UpdateUserPayloadResolvers<ContextType = any, ParentType extends Res
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  lastname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

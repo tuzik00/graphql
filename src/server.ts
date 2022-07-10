@@ -19,11 +19,9 @@ export default async (modules, { database }) => {
     graphiql: {
       subscriptionsProtocol: 'WS',
     },
-    context: async ({ request }) => {
-      const userId = request.headers.get('userId') ?? null;
-
+    context: async () => {
       return {
-        userId,
+        userId: '62ca913dd07668192d63f9fe',
         database,
       };
     },

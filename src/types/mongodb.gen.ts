@@ -54,12 +54,6 @@ export type Mutation = {
 export type PointInput = {
   coords: CoordsInput;
   type: RoutePointType;
-  user?: InputMaybe<PointUserInput>;
-};
-
-/** Пользователь */
-export type PointUserInput = {
-  id: Scalars['ID'];
 };
 
 /** Запросы */
@@ -79,8 +73,8 @@ export type QueryRouteArgs = {
 /** Маршрут */
 export type Route = {
   __typename?: 'Route';
+  _id: Scalars['ID'];
   endPosition: RouteCoords;
-  id: Scalars['ID'];
   points: Array<Maybe<RoutePoint>>;
   startPosition: RouteCoords;
 };
@@ -126,13 +120,14 @@ export type RoutePoint = {
 
 /** Тип точки */
 export enum RoutePointType {
+  Unknown = 'UNKNOWN',
   User = 'USER'
 }
 
 /** Пользователь */
 export type RoutePointUser = {
   __typename?: 'RoutePointUser';
-  id: Scalars['ID'];
+  _id: Scalars['ID'];
 };
 
 /** Результат запроса обновления пользователя */
@@ -144,17 +139,17 @@ export type UpdateUserPayload = {
 /** Пользователь */
 export type User = {
   __typename?: 'User';
+  _id: Scalars['ID'];
   email?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  lastname?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
 };
 
 /** Параметры запроса на создание пользователя */
 export type UserInput = {
   email: Scalars['Email'];
-  firstname?: InputMaybe<Scalars['String']>;
-  lastname?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
 };
 
 /** CRUD пользователя */
@@ -185,8 +180,8 @@ export type UserMutationUpdateArgs = {
 
 import { ObjectId } from 'mongodb';
 export type RouteDbObject = {
-  endPosition: RouteCoords,
   _id: ObjectId,
+  endPosition: RouteCoords,
   points: Array<Maybe<RoutePoint>>,
   startPosition: RouteCoords,
 };
@@ -203,12 +198,12 @@ export type RoutePointDbObject = {
 };
 
 export type RoutePointUserDbObject = {
-  id: string,
+  _id: string,
 };
 
 export type UserDbObject = {
+  _id: ObjectId,
   email?: Maybe<string>,
   firstName?: Maybe<string>,
-  _id: ObjectId,
-  lastname?: Maybe<string>,
+  lastName?: Maybe<string>,
 };

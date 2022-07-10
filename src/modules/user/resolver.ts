@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { ApolloError } from 'apollo-server-core';
 import { Resolvers } from '@/types/graphql.gen';
-import UserModel from './model';
+import { UserModel } from './model';
 
 const resolver: Resolvers = {
   Query: {
@@ -16,10 +16,7 @@ const resolver: Resolvers = {
 
       return {
         __typename: 'User',
-        id: user._id.toHexString(),
-        firstName: user.firstName,
-        lastname: user.lastname,
-        email: user.email,
+        ...UserModel.serialize(user),
       };
     },
   },
@@ -31,21 +28,19 @@ const resolver: Resolvers = {
   UserMutation: {
     create: async (_, { input }, ctx) => {
       try {
-        const newUser = new UserModel(input);
-        const userCollection = ctx.database.collection('users');
+        const newUser = new UserModel({
+          ...input,
+          _id: new ObjectId(),
+        });
 
+        const userCollection = ctx.database.collection('users');
         const { insertedId } = await userCollection.insertOne(newUser);
+
         const user = await userCollection.findOne({ _id: insertedId });
 
         return {
           __typename: 'CreateUserPayload',
-          payload: {
-            __typename: 'User',
-            id: user._id.toHexString(),
-            firstName: user.firstName,
-            lastname: user.lastname,
-            email: user.email,
-          },
+          payload: UserModel.serialize(user),
         };
       } catch (e) {
         throw new ApolloError('Insert user error!');

@@ -26,8 +26,8 @@ type UserMutation {
 Параметры запроса на создание пользователя
 """
 input UserInput {
-  firstname: String
-  lastname: String
+  firstName: String
+  lastName: String
   email: Email!
 }
 

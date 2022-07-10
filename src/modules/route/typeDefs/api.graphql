@@ -48,15 +48,8 @@ input RouteInput {
 input PointInput {
   type: RoutePointType!
   coords: CoordsInput!
-  user: PointUserInput
 }
 
-"""
-Пользователь
-"""
-input PointUserInput {
-  id: ID!
-}
 
 """
 Ввод данных о позиции роута

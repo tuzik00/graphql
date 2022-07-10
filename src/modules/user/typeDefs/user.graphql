@@ -2,8 +2,8 @@
 Пользователь
 """
 type User @entity {
-  id: ID! @id
+  _id: ID! @id
   firstName: String @column
-  lastname: String @column
+  lastName: String @column
   email: String @column
 }
