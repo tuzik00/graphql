@@ -20,7 +20,8 @@ const resolver: Resolvers = {
       const newRoute = new RouteModel();
       newRoute.startPosition = new RouteCoordsModel(input.startPosition);
       newRoute.endPosition = new RouteCoordsModel(input.endPosition);
-      newRoute.points = input.points.map((point) =>
+      newRoute.points = input.points.map(
+        (point) =>
           new RoutePointModel({
             type: point.type,
             coords: new RouteCoordsModel(point.coords),

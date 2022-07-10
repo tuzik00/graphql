@@ -4,34 +4,56 @@ import {
   RouteCoordsDbObject,
   RouteDbObject,
   RoutePointDbObject,
-  RoutePointType,
   RoutePointUserDbObject,
 } from '@/types/mongodb.gen';
 
-import { Route } from '@/types/graphql.gen';
+import {
+  Route,
+  RouteCoords,
+  RoutePoint,
+  RoutePointType,
+  RoutePointUser,
+} from '@/types/graphql.gen';
 
 export class RouteCoordsModel implements RouteCoordsDbObject {
-  __typename;
   latitude: number;
   longitude: number;
 
-  constructor(params?: RouteCoordsDbObject) {
-    this.__typename = 'RouteCoords';
+  static serialize(routeCoords) {
+    const model = new RouteCoordsModel(routeCoords);
 
+    return {
+      __typename: 'RouteCoords',
+      ...model,
+    } as RouteCoords;
+  }
+
+  constructor(params?: RouteCoordsDbObject) {
     this.latitude = params?.latitude || 0;
     this.longitude = params?.longitude || 0;
   }
 }
 
 export class RoutePointModel implements RoutePointDbObject {
-  __typename;
   type: RoutePointType;
   coords: RouteCoordsDbObject;
   user: RoutePointUserDbObject;
 
-  constructor(params?: RoutePointDbObject) {
-    this.__typename = 'RoutePoint';
+  static serialize(routePoint: RoutePoint) {
+    const model = new RoutePointModel(routePoint);
 
+    return {
+      __typename: 'RoutePoint',
+      type: model.type,
+      coords: RouteCoordsModel.serialize(routePoint.coords),
+      user:
+        model.type === RoutePointType.User
+          ? RoutePointUserModel.serialize(model.user)
+          : null,
+    } as RoutePoint;
+  }
+
+  constructor(params?: RoutePointDbObject) {
     this.type = params?.type || RoutePointType.Unknown;
     this.coords =
       params.coords ||
@@ -49,46 +71,44 @@ export class RoutePointModel implements RoutePointDbObject {
 }
 
 export class RoutePointUserModel implements RoutePointUserDbObject {
-  __typename;
   _id: string;
 
-  constructor(params?: RoutePointUserDbObject) {
-    this.__typename = 'RoutePointUser';
+  static serialize(routePoint: RoutePointUserDbObject) {
+    const model = new RoutePointUserModel(routePoint);
 
+    return {
+      __typename: 'RoutePointUser',
+      ...model,
+    } as RoutePointUser;
+  }
+
+  constructor(params?: RoutePointUserDbObject) {
     this._id = params?._id || '';
   }
 }
 
 export class RouteModel implements RouteDbObject {
-  __typename;
   _id;
   startPosition: RouteCoordsDbObject;
   endPosition: RouteCoordsDbObject;
   points: RoutePointDbObject[];
 
   static serialize(route: RouteDbObject) {
-    return new RouteModel(route) as Route;
+    const routeModel = new RouteModel(route);
+
+    return {
+      __typename: 'Route',
+      ...routeModel,
+      startPosition: RouteCoordsModel.serialize(routeModel.startPosition),
+      endPosition: RouteCoordsModel.serialize(routeModel.endPosition),
+      points: routeModel.points.map(RoutePointModel.serialize),
+    } as Route;
   }
 
   constructor(params?: RouteDbObject) {
-    this.__typename = 'Route';
-
     this._id = new ObjectId(params?._id);
+    this.points = params?.points || [];
     this.startPosition = new RouteCoordsModel(params?.startPosition);
     this.endPosition = new RouteCoordsModel(params?.endPosition);
-
-    this.points = params?.points?.map((point) => {
-      const p = {
-        ...point,
-        coords: new RouteCoordsModel(point.coords),
-        user: null,
-      };
-
-      if (point.type === RoutePointType.User) {
-        p.user = new RoutePointUserModel(point.user);
-      }
-
-      return p;
-    });
   }
 }
